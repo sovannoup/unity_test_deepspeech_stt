@@ -6,6 +6,7 @@ using UnityEngine;
 public class sendbyte : MonoBehaviour
 {
     public AudioClip clip;
+    AudioClip myAudioClip;
     string savedPath;
 
     void Start()
@@ -16,8 +17,18 @@ public class sendbyte : MonoBehaviour
             return true;
         };
     }
-
-    public void convertSpeech()
+    public void startRecording()
+    {
+        myAudioClip = Microphone.Start(null, true, 5, 16000);
+    }
+    public void stopRecording()
+    {
+        Microphone.End(null);
+        SavWav.Save("myfile", myAudioClip);
+        savedPath = Path.Combine(Application.persistentDataPath, "myfile.wav");
+        StartCoroutine(converting());
+    }
+        public void convertSpeech()
     {
         SavWav.Save("myfile", clip);
         savedPath = Path.Combine(Application.persistentDataPath, "myfile.wav");
